@@ -22,6 +22,11 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role',
+        'is_active',
+        'is_approved',
+        'approved_at',
+        'approved_by',
     ];
 
     /**
@@ -48,5 +53,25 @@ class User extends Authenticatable
             'password' => 'hashed',
             'two_factor_confirmed_at' => 'datetime',
         ];
+    }
+
+    // A customer can have many service requests
+    public function serviceRequests()
+    {
+    return $this->hasMany(ServiceRequest::class);
+    }
+
+
+    // Staff who approved this user
+    public function approver()
+    {
+    return $this->belongsTo(User::class, 'approved_by');
+    }
+
+
+    // Requests changed by this user (staff)
+    public function serviceRequestChanges()
+    {
+    return $this->hasMany(ServiceRequestChange::class, 'changed_by');
     }
 }

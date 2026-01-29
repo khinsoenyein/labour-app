@@ -17,6 +17,11 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->enum('role', ['customer', 'staff', 'admin'])->default('customer');
+            $table->boolean('is_active')->default(true); // is_active = true → account not blocked
+            $table->boolean('is_approved')->default(false); // is_approved = false → cannot login yet
+            $table->timestamp('approved_at')->nullable();
+            $table->foreignId('approved_by')->nullable()->constrained('users');
             $table->rememberToken();
             $table->timestamps();
         });
